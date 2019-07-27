@@ -74,8 +74,6 @@ def plot_one_face(sample_id=5, frame=1, location_face=51, location_iris=9):
     assert(one_frame.shape==(51,3))
     assert(one_eye_frame_left_pupil.shape==(2,))
     assert(one_eye_frame_left_iris.shape==(9,3))
-    # print(one_frame[0:location])
-    # lambda
     x_axis=[t[0] for t in one_frame[0:location_face]]
     y_axis=[1-t[1] for t in one_frame[0:location_face]]
     x_axis_eye=[one_eye_frame_left_pupil[0]] \
@@ -86,10 +84,34 @@ def plot_one_face(sample_id=5, frame=1, location_face=51, location_iris=9):
                 +[1-t[1] for t in one_eye_frame_left_iris[0:location_iris]] \
                 +[1-one_eye_frame_right_pupil[1]] \
                 +[1-t[1] for t in one_eye_frame_right_iris[0:location_iris]]
-    plt.figure('frame No.'+str(frame)+' for sample '+str(sample_id))
+    plt.figure('frame No.'+str(frame)+' for sample '+str(sample_id)) # set fixed scale
     plt.plot(x_axis,y_axis,'xb')
     plt.plot(x_axis_eye,y_axis_eye,'.y')
     plt.show()
+
+def return_one_face(sample_id=5, frame=1, location_face=51, location_iris=9):
+    '''
+    plot one frame. Note: frame starts from 1, the 0th element in one_sample is filename
+    '''
+    one_sample=load.data[sample_id]
+    one_eye=load.eye[sample_id]
+    one_frame=one_sample[frame]
+    (one_eye_frame_left_pupil, one_eye_frame_left_iris, one_eye_frame_right_pupil, one_eye_frame_right_iris)= \
+        (one_eye[frame][i] for i in range(4))
+    assert(one_frame.shape==(51,3))
+    assert(one_eye_frame_left_pupil.shape==(2,))
+    assert(one_eye_frame_left_iris.shape==(9,3))
+    x_axis=[t[0] for t in one_frame[0:location_face]]
+    y_axis=[1-t[1] for t in one_frame[0:location_face]]
+    x_axis_eye=[one_eye_frame_left_pupil[0]] \
+                +[t[0] for t in one_eye_frame_left_iris[0:location_iris]] \
+                +[one_eye_frame_right_pupil[0]] \
+                +[t[0] for t in one_eye_frame_right_iris[0:location_iris]]
+    y_axis_eye=[1-one_eye_frame_left_pupil[1]] \
+                +[1-t[1] for t in one_eye_frame_left_iris[0:location_iris]] \
+                +[1-one_eye_frame_right_pupil[1]] \
+                +[1-t[1] for t in one_eye_frame_right_iris[0:location_iris]]
+    return (x_axis+x_axis_eye, y_axis+y_axis_eye)
 
 def plot_animation(length=40):
     i=1

@@ -11,6 +11,8 @@ eye=np.load("webcam_eye_feature.npy")
 label=np.load("webcam_label.npy")
 filename=np.load("webcam_filename.npy")
 labelname=np.load("webcam_labelname.npy")
+pos=np.load("webcam_pos.npy")
+confidence=np.load("webcam_confidence.npy")
 
 
 

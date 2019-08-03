@@ -103,6 +103,7 @@ def return_one_face(sample_id=5, frame=1, location_face=51, location_iris=9):
     assert(one_eye_frame_left_iris.shape==(9,3))
     x_axis=[t[0] for t in one_frame[0:location_face]]
     y_axis=[1-t[1] for t in one_frame[0:location_face]]
+    axis_confidence=[t[2] for t in one_frame[0:location_face]]
     x_axis_eye=[one_eye_frame_left_pupil[0]] \
                 +[t[0] for t in one_eye_frame_left_iris[0:location_iris]] \
                 +[one_eye_frame_right_pupil[0]] \
@@ -111,6 +112,7 @@ def return_one_face(sample_id=5, frame=1, location_face=51, location_iris=9):
                 +[1-t[1] for t in one_eye_frame_left_iris[0:location_iris]] \
                 +[1-one_eye_frame_right_pupil[1]] \
                 +[1-t[1] for t in one_eye_frame_right_iris[0:location_iris]]
+    eye_conficence=[]
     return (x_axis+x_axis_eye, y_axis+y_axis_eye)
 
 def plot_animation(length=40):

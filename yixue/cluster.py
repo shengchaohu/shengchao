@@ -31,6 +31,20 @@ def student_file_set(user_id=-2)->unionfind.UnionFindSet:
     #             break
     return equivalance_file_set(id=user_id)
 
+def student_file_set_specific(given_student_list, user_id=-2, label=load.label)->unionfind.UnionFindSet:
+    '''
+    use same user_id as equivalance condition. Also limit search in specific range
+    return a UnionFindSet object
+    '''
+    ufs=unionfind.UnionFindSet(len(label))
+    for file_index in range(len(label)):
+        for file_index_another in range(len(label)):
+            if int(label[file_index][user_id]) in given_student_list \
+                and label[file_index][user_id]==label[file_index_another][user_id]:
+                ufs.union(file_index,file_index_another)
+                break
+    return ufs
+
 def question_file_set(question_id=6)->unionfind.UnionFindSet:
     '''
     use same question_id as equivalance condition.

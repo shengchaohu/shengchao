@@ -1,48 +1,110 @@
-from sortedcontainers import SortedDict
+from collections import OrderedDict
 import bisect
 import load
 
-def time_start_end(label=load.label, question_start_time_delta=8, question_end_time_delta=5):
+class Interval:
     '''
-    return a list of time interval
+    interval from json file, which is string by default
     '''
-    _start_end=[[label[index][question_start_time_delta],label[index][question_end_time_delta],index] for index in range(len(label))]
-    return sorted(_start_end,key=lambda x: x[0])
+    def time_start_end(self, label=load.label, question_start_time_delta=8, 
+            question_end_time_delta=5):
+        '''
+        return a list of time interval, consisting of [start,end,(file) index]
+        '''
+        _start_end=[[label[index][question_start_time_delta],
+            label[index][question_end_time_delta],index] for index in range(len(label))]
+        return sorted(_start_end,key=lambda x: x[0])
 
-def merge(intervals):
-    '''
-    merge intervals if overlapping. Intervals is of type array of array
-    returns a list of list
-    '''
-    ans = []
-    for interval in sorted(intervals, key=lambda x: x[0]):
-        if not ans or interval[0] > ans[-1][1]:
-            ans.append(interval)
-        else:
-            ans[-1][1] = max(ans[-1][1], interval[1])
-    return ans
+    def merge(self,intervals):
+        '''
+        merge intervals if overlapping. Intervals is of type list of list
+        returns a list of list
+        '''
+        ans = []
+        for interval in sorted(intervals, key=lambda x: x[0]):
+            if not ans or interval[0] > ans[-1][1]:
+                ans.append(interval)
+            else:
+                ans[-1][1] = max(ans[-1][1], interval[1])
+        return ans
 
-def insert(intervals,newinterval):
+    def insert(self,intervals,newinterval,merge=0):
+        '''
+        linear time insert
+        Insert new interval to a list of non-overlapping intervals (merge if merge=1). 
+        if merge=0, the two overlapping intervals will be printed out. 
+        The latter interval will not be added. Then Insert will continue.
+        Intervals is of type list of list
+        returns a list of list
+        '''
+        ans = []
+
+        index = len(intervals)
+        for i in range(len(intervals)):
+            if newInterval[0] < intervals[i][0]:
+                index = i
+                break
+
+        intervals.insert(index, newInterval) # this insert is built_in method for list
+
+        # then repeat the same prodecure as Interval.merge(self, intervals)
+        for interval in intervals:
+            if not ans or interval[0] > ans[-1][1]:
+                ans.append(interval)
+            else:
+                if(merge==0):
+                    print(interval, ans[-1])
+                    continue
+                elif(merge==1):
+                    ans[-1][1] = max(ans[-1][1], interval[1])
+        return ans
+
+class Interval_quick(Interval):
     '''
-    Insert new interval to a list of non-overlapping intervals. Intervals is of type array of array
-    returns a list of list
+    fast implementation of Interval
     '''
-    ans = []
+    def time_start_end(self):
+        '''
+        return a list of time interval, consisting of [start,end,(file) index]
+        '''
+        c=Interval.time_start_end(self)
+        c=[list(map(lambda ccc: int(float(ccc)), cc)) for cc in c]
+        return sorted(c,key=lambda x: x[0])
 
-    index = len(intervals)
-    for i in range(len(intervals)):
-        if newInterval[0] < intervals[i][0]:
-            index = i
-            break
+    def insert(self,intervals,newinterval,merge=1):
+        '''
+        O(logn) time implementation of insert method
+        ans and intervals are of type OrderedDict
+        a in ans, i in intervals is of form {start time:(end time, index}
+        new interval is given via a tuple (start time, end time, index)
+        if merge=1, the overlapping intervals will be printed out and then merge.
+        '''
+        # suppose OrderedDict is implemented using double linked list
+        ans = OrderedDict()
 
-    intervals.insert(index, newInterval)
+        # find left bound
+        keys = list(intervals.keys())
+        left_key=keys[bisect.bisect_left(keys,newinterval[0])]
+        right_key=keys[bisect.bisect_left(keys,newinterval[1])]
+        ......
+        for i in range(len(intervals)):
+            if newInterval[0] < intervals[i][0]:
+                index = i
+                break
 
-    for interval in intervals:
-        if not ans or interval[0] > ans[-1][1]:
-            ans.append(interval)
-        else:
-            ans[-1][1] = max(ans[-1][1], interval[1])
-    return ans
+        intervals.insert(index, newInterval) # this insert is built_in method for list
+
+        # then repeat the same prodecure as Interval.merge(self, intervals)
+        for interval in intervals:
+            if not ans or interval[0] > ans[-1][1]:
+                ans.append(interval)
+            else:
+                if(merge==0):
+                    print(interval, ans[-1])
+                    continue
+                elif(merge==1):
+                    ans[-1][1] = max(ans[-1][1], interval[1])
+        return ans
 
 
 class RangeModule():

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+data=pd.read_csv('attention\\ch_data_new.csv')
 # data=pd.read_csv('test_ninggu_en_stat_nomissing_attention_that_worked.csv',sep='\t')
 data=pd.read_csv('test_ninggu_en_stat.csv')
 

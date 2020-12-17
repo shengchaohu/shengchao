@@ -8,7 +8,7 @@ if len(sys.argv) != 3:
     exit()
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
-server.bind((IP_address, Port))
+server.connect((IP_address, Port))
 
 while True:
     sockets_list = [sys.stdin, server]

@@ -18,7 +18,7 @@ if len(sys.argv) != 3:
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
 # binds the server to IP address and port. The client must be aware of these parameters
-server.connect((IP_address, Port))
+server.bind((IP_address, Port))
 # listens for 100 active connections. This number can be increased as per convenience
 server.listen(100)
 list_of_clients=[]

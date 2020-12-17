@@ -17,10 +17,10 @@ if len(sys.argv) != 3:
     exit()
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
-server.bind((IP_address, Port)) 
-#binds the server to an entered IP address and at the specified port number. The client must be aware of these parameters
+# binds the server to IP address and port. The client must be aware of these parameters
+server.connect((IP_address, Port))
+# listens for 100 active connections. This number can be increased as per convenience
 server.listen(100)
-#listens for 100 active connections. This number can be increased as per convenience
 list_of_clients=[]
 
 def clientthread(conn, addr):

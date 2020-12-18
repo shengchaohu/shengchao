@@ -1,6 +1,6 @@
 # Chat-Room-server modified from https://www.geeksforgeeks.org/simple-chat-room-using-python/
 ## Steps:
-* git clone https://github.com/shengchaohu/shengchao.git
+* open terminal and run `git clone https://github.com/shengchaohu/shengchao.git`
 * go to the shengchao/chat_room
 ## Example use case:
 ### first we start the server

@@ -22,20 +22,28 @@ server.bind((IP_address, Port))
 # listens for 100 active connections. This number can be increased as per convenience
 server.listen(100)
 list_of_clients=[]
+name_dict = {}
 
 def clientthread(conn, addr):
-    conn.send(str.encode("Welcome to this chatroom!"))
+    conn.send(str.encode("Welcome to this chatroom! Please tell me your name first:"))
     print(f"now there are {len(list_of_clients)} clients connected")
-    #sends a message to the client whose user object is conn
+    number_msg_thread = 0
     while True:
         try:
-            message = conn.recv(2048).decode()  
+            message = conn.recv(2048).decode()
             if message:
-                # print the message and address of the user who just sent the message on the server terminal
-                print("<" + addr[0] + "> " + message)
-                message_to_send = "<" + addr[0] + "> " + message
-                # add any logic you want here
-                broadcast(message_to_send,conn)
+                if number_msg_thread == 0:
+                    name_dict[addr] = message
+                    message_to_send = f"<Admin> Welcome {message}!"
+                    conn.send(str.encode(message_to_send))
+                    broadcast(message_to_send,conn)
+                else:
+                    # print the message and address of the user who just sent the message on the server terminal
+                    print("<" + name_dict[addr] + "> " + message)
+                    message_to_send = "<" + name_dict[addr] + "> " + message
+                    # add any logic you want here
+                    broadcast(message_to_send,conn)
+                number_msg_thread += 1
             else:
                 remove(conn)
         except:

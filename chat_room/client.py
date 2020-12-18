@@ -15,12 +15,14 @@ while True:
     read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
     for socks in read_sockets:
         if socks == server:
-            message = socks.recv(2048)
+            message = socks.recv(2048).decode()
             print(message)
         else:
-            message = sys.stdin.readline()
+            message = sys.stdin.readline().strip()
             server.send(str.encode(message))
-            sys.stdout.write("<You>")
+            sys.stdout.write("<You> ")
             sys.stdout.write(message)
+            sys.stdout.write("\n")
             sys.stdout.flush()
+            
 server.close()
